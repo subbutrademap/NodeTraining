@@ -1,19 +1,8 @@
 import React from 'react';
-import Login from './Day3/Login';
-import Welcome from './Day3/Welcome';
-import GridLayout from './Day3/GridLayout';
-import Home from './Day3/Home';
-import Calculator from './Day4/Calculator';
-import LoginForm from './Day4/LoginForm';
+import AppRoutes from './AppRoutes';
 
 const App = () => (
-  <>
-    {/* <Welcome /> */}
-    {/* <GridLayout /> */}
-    {/* <Home /> */}
-    {/* <Calculator /> */}
-    <LoginForm />
-  </>
+  <AppRoutes />
 );
 
 export default App;

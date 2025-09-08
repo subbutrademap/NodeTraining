@@ -1,0 +1,10 @@
+{
+    "mysqlConString" : {
+        "host": "localhost",
+        "user": "root",
+        "password" : "Developer!23",
+        "port" : "3306",    
+        "database" : "Training" ,
+        "multipleStatements": true
+    }
+}
