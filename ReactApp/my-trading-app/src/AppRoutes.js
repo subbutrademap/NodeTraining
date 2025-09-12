@@ -1,7 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "./Day6/LoginPage";
 import HomePage from "./Day6/HomePage";
-import UserManagement from "./Day6/UserManagement";
+import UserManagement from "./Day6/CRUD/UserManagement";
 import ContactUs from "./Day6/ContactUs";
 import AppInit from "./Day6/AppInit";
 

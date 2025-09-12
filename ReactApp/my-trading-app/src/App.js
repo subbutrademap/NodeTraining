@@ -1,8 +1,11 @@
 import React from 'react';
 import AppRoutes from './AppRoutes';
-
+import { AppContextProvider } from './Day6/Store/AppContextProvider';
 const App = () => (
-  <AppRoutes />
+  <AppContextProvider>
+    <AppRoutes />
+  </AppContextProvider>
+
 );
 
 export default App;

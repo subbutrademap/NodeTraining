@@ -62,6 +62,45 @@ app.post("/api/adduser", authorizeToken, async (req, res) => {
     }
   });
 
+
+  app.post("/api/getUsers", authorizeToken, async (req, res) => {
+    try {
+        const result = await UserService.getUsers();
+        res.send(result);
+    } catch (e) {
+        res.status(500).send({ 
+            error: "Internal Server Error", 
+            message: e.message 
+        });
+    }
+  });
+
+  app.post("/api/deleteUser", authorizeToken, async (req, res) => {
+    try {
+        const result = await UserService.deleteUser(req.body);
+        res.send(result);
+    } catch (e) {
+        res.status(500).send({ 
+            error: "Internal Server Error", 
+            message: e.message 
+        });
+    }
+  });
+
+  app.post("/api/updateUser", authorizeToken, async (req, res) => {
+    try {
+        const result = await UserService.updateUser(req.body);
+        res.send(result);
+    } catch (e) {
+        res.status(500).send({ 
+            error: "Internal Server Error", 
+            message: e.message 
+        });
+    }
+  });   
+
+
+
 //start the server
 app.listen(PORT , () => {
     console.log("Server Started, and listening for request on port http://localhost:3000");
