@@ -6,13 +6,16 @@ import {
     Alert,
     CircularProgress,
     IconButton,
-    Tooltip
+    Tooltip,
+    Button
 } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
-import { Refresh as RefreshIcon } from '@mui/icons-material';
+import { Refresh as RefreshIcon, Add as AddIcon } from '@mui/icons-material';
 import { useAppState } from "../Store/AppContextProvider";
 import CookieUtility from "../CookieUtility";
-import { userColumns, dataGridConfig, apiConfig } from './UserManagementConfig';
+import { getUserColumns, dataGridConfig, apiConfig } from './UserManagementConfig';
+import AddEditUserComponent from './AddEditUserComponent';
+import DeleteUserModal from './DeleteUserModal';
 
 const UserManagement = () => {
     const { session } = useAppState();
@@ -23,6 +26,11 @@ const UserManagement = () => {
         page: 0,
         pageSize: 10
     });
+    const [addUserModalOpen, setAddUserModalOpen] = useState(false);
+    const [modalMode, setModalMode] = useState("Add");
+    const [selectedUser, setSelectedUser] = useState(null);
+    const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+    const [userToDelete, setUserToDelete] = useState(null);
 
     // Fetch users from API
     const fetchUsers = async () => {
@@ -117,6 +125,57 @@ const UserManagement = () => {
         fetchUsers();
     };
 
+    // Handle add new user
+    const handleAddUser = () => {
+        setModalMode("Add");
+        setSelectedUser(null);
+        setAddUserModalOpen(true);
+    };
+
+    // Handle edit user
+    const handleEditUser = (userId) => {
+        const user = users.find(u => u.id === userId);
+        if (user) {
+            setModalMode("Edit");
+            setSelectedUser(user);
+            setAddUserModalOpen(true);
+        }
+    };
+
+    // Handle modal close
+    const handleCloseAddUserModal = () => {
+        setAddUserModalOpen(false);
+        setModalMode("Add");
+        setSelectedUser(null);
+    };
+
+    // Handle user added/updated successfully
+    const handleUserAdded = () => {
+        // Refresh the users list
+        fetchUsers();
+    };
+
+    // Handle delete user
+    const handleDeleteUser = (userId) => {
+        const user = users.find(u => u.id === userId);
+        if (user) {
+            setUserToDelete(user);
+            setDeleteModalOpen(true);
+        }
+    };
+
+    // Handle delete modal close
+    const handleCloseDeleteModal = () => {
+        setDeleteModalOpen(false);
+        setUserToDelete(null);
+    };
+
+    // Handle user deleted successfully
+    const handleUserDeleted = () => {
+        // Refresh the users list
+        fetchUsers();
+    };
+
     return (
         <Box sx={{ p: 3, height: '100vh', display: 'flex', flexDirection: 'column' }}>
             {/* Header Section */}
@@ -143,6 +202,34 @@ const UserManagement = () => {
                                 <RefreshIcon />
                             </IconButton>
                         </Tooltip>
+                        <Button
+                            variant="contained"
+                            startIcon={<AddIcon />}
+                            onClick={handleAddUser}
+                            sx={{
+                                backgroundColor: 'rgba(255,255,255,0.2)',
+                                color: 'white',
+                                border: '1px solid rgba(255,255,255,0.3)',
+                                borderRadius: '8px',
+                                px: 3,
+                                py: 1,
+                                fontWeight: 'bold',
+                                textTransform: 'none',
+                                fontSize: '0.95rem',
+                                boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+                                '&:hover': {
+                                    backgroundColor: 'rgba(255,255,255,0.3)',
+                                    transform: 'translateY(-1px)',
+                                    boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
+                                },
+                                '&:active': {
+                                    transform: 'translateY(0)',
+                                },
+                                transition: 'all 0.2s ease-in-out'
+                            }}
+                        >
+                            Add User
+                        </Button>
                     </Box>
                 </Box>
             </Paper>
@@ -178,7 +265,7 @@ const UserManagement = () => {
                     ) : (
                         <DataGrid
                             rows={users}
-                            columns={userColumns}
+                            columns={getUserColumns(handleEditUser, handleDeleteUser)}
                             {...dataGridConfig}
                             paginationModel={paginationModel}
                             onPaginationModelChange={setPaginationModel}
@@ -195,6 +282,23 @@ const UserManagement = () => {
                     )}
                 </Box>
             </Paper>
+
+            {/* Add/Edit User Modal */}
+            <AddEditUserComponent
+                open={addUserModalOpen}
+                onClose={handleCloseAddUserModal}
+                onUserAdded={handleUserAdded}
+                mode={modalMode}
+                userDetails={selectedUser}
+            />
+
+            {/* Delete User Modal */}
+            <DeleteUserModal
+                open={deleteModalOpen}
+                onClose={handleCloseDeleteModal}
+                userDetails={userToDelete}
+                onUserDeleted={handleUserDeleted}
+            />
         </Box>
     );
 };

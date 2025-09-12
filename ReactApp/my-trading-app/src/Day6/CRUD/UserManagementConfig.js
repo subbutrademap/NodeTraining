@@ -1,7 +1,7 @@
 import { GridActionsCellItem } from '@mui/x-data-grid';
 
 // DataGrid column configuration
-export const userColumns = [
+export const getUserColumns = (handleEditUser, handleDeleteUser) => [
     {
         field: 'id',
         headerName: 'ID',
@@ -79,30 +79,19 @@ export const userColumns = [
             <GridActionsCellItem
                 icon={<span style={{ color: '#1976d2' }}>✏️</span>}
                 label="Edit"
-                onClick={() => handleEdit(params.id)}
+                onClick={() => handleEditUser(params.id)}
                 color="primary"
             />,
             <GridActionsCellItem
                 icon={<span style={{ color: '#d32f2f' }}>🗑️</span>}
                 label="Delete"
-                onClick={() => handleDelete(params.id)}
+                onClick={() => handleDeleteUser(params.id)}
                 color="error"
             />
         ]
     }
 ];
 
-// Handle edit action
-const handleEdit = (id) => {
-    console.log('Edit user with ID:', id);
-    // TODO: Implement edit functionality
-};
-
-// Handle delete action
-const handleDelete = (id) => {
-    console.log('Delete user with ID:', id);
-    // TODO: Implement delete functionality
-};
 
 // DataGrid configuration options
 export const dataGridConfig = {
